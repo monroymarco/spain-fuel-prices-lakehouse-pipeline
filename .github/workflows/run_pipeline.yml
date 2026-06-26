@@ -34,6 +34,18 @@ jobs:
         run: |
           databricks version
 
+      # ========= NUEVOS PASOS DE DIAGNÓSTICO =========
+
+      - name: Test Ministry website
+        run: |
+          curl -I https://sedeaplicaciones.minetur.gob.es
+
+      - name: Test Fuel API
+        run: |
+          curl -v https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/
+
+      # ==============================================
+
       - name: Download Fuel Prices
         run: |
           python scripts/download_fuel_prices.py
@@ -49,18 +61,10 @@ jobs:
             "dbfs:/Volumes/workspace/default/fuel_prices/raw/$(basename "$LATEST_FILE")" \
             --overwrite
 
-      - name: Verify uploaded file
-        run: |
-          echo "Files currently in Databricks Volume:"
-          databricks fs ls dbfs:/Volumes/workspace/default/fuel_prices/raw/
-
       - name: Trigger Databricks Job
         run: |
-          RESPONSE=$(curl -s -X POST \
+          curl -X POST \
             "$DATABRICKS_HOST/api/2.1/jobs/run-now" \
             -H "Authorization: Bearer $DATABRICKS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"job_id\": $DATABRICKS_JOB_ID}")
-
-          echo "Databricks response:"
-          echo "$RESPONSE"
+            -d "{\"job_id\": $DATABRICKS_JOB_ID}"
