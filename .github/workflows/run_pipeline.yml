@@ -41,13 +41,22 @@ jobs:
       - name: Download Fuel Prices
         run: |
           python3 scripts/download_fuel_prices.py
+
       - name: Verify Databricks authentication
         run: |
           databricks auth describe
           databricks current-user me
+
       - name: Upload JSON to Databricks Volume
         run: |
-          databricks fs ls dbfs:/Volumes/workspace/default/fuel_prices/raw/
+          LATEST_FILE=$(ls -t data/raw/*.json | head -n 1)
+
+          echo "Uploading: $LATEST_FILE"
+
+          databricks fs cp \
+            "$LATEST_FILE" \
+            "dbfs:/Volumes/workspace/default/fuel_prices/raw/$(basename "$LATEST_FILE")" \
+            --overwrite
 
       - name: Trigger Databricks Job
         run: |
