@@ -47,14 +47,7 @@ jobs:
           databricks current-user me
       - name: Upload JSON to Databricks Volume
         run: |
-          LATEST_FILE=$(ls -t data/raw/*.json | head -n 1)
-
-          echo "Uploading: $LATEST_FILE"
-
-          databricks fs cp \
-            "$LATEST_FILE" \
-            "dbfs:/Volumes/workspace/default/fuel_prices/raw/$(basename "$LATEST_FILE")" \
-            --overwrite
+          databricks fs ls dbfs:/Volumes/workspace/default/fuel_prices/raw/
 
       - name: Trigger Databricks Job
         run: |
