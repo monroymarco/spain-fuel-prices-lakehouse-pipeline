@@ -19,7 +19,6 @@ jobs:
       - name: Verify Python
         run: |
           python3 --version
-          which python3
 
       - name: Install Python dependencies
         run: |
@@ -30,22 +29,9 @@ jobs:
         run: |
           databricks version
 
-      - name: Test Ministry website
-        run: |
-          curl -I https://sedeaplicaciones.minetur.gob.es
-
-      - name: Test Fuel API
-        run: |
-          curl -v https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/
-
       - name: Download Fuel Prices
         run: |
           python3 scripts/download_fuel_prices.py
-
-      - name: Verify Databricks authentication
-        run: |
-          databricks auth describe
-          databricks current-user me
 
       - name: Upload JSON to Databricks Volume
         run: |
