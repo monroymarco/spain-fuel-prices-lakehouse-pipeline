@@ -49,10 +49,18 @@ jobs:
             "dbfs:/Volumes/workspace/default/fuel_prices/raw/$(basename "$LATEST_FILE")" \
             --overwrite
 
+      - name: Verify uploaded file
+        run: |
+          echo "Files currently in Databricks Volume:"
+          databricks fs ls dbfs:/Volumes/workspace/default/fuel_prices/raw/
+
       - name: Trigger Databricks Job
         run: |
-          curl -X POST \
+          RESPONSE=$(curl -s -X POST \
             "$DATABRICKS_HOST/api/2.1/jobs/run-now" \
             -H "Authorization: Bearer $DATABRICKS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"job_id\": $DATABRICKS_JOB_ID}"
+            -d "{\"job_id\": $DATABRICKS_JOB_ID}")
+
+          echo "Databricks response:"
+          echo "$RESPONSE"
