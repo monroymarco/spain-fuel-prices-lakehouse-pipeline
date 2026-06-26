@@ -1,12 +1,36 @@
 import json
+import time
 from datetime import datetime
 
 import requests
 
 URL = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
 
-response = requests.get(URL, timeout=60)
-response.raise_for_status()
+response = None
+
+for attempt in range(5):
+    try:
+        print(f"Download attempt {attempt + 1}/5...")
+
+        response = requests.get(
+            URL,
+            timeout=60,
+            headers={
+                "User-Agent": "Mozilla/5.0"
+            },
+        )
+
+        response.raise_for_status()
+        break
+
+    except requests.exceptions.RequestException as e:
+        print(f"Attempt failed: {e}")
+
+        if attempt == 4:
+            raise
+
+        print("Retrying in 10 seconds...")
+        time.sleep(10)
 
 data = response.json()
 
