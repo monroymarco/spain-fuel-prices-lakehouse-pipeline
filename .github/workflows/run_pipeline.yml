@@ -41,7 +41,10 @@ jobs:
       - name: Download Fuel Prices
         run: |
           python3 scripts/download_fuel_prices.py
-
+      - name: Verify Databricks authentication
+        run: |
+          databricks auth describe
+          databricks current-user me
       - name: Upload JSON to Databricks Volume
         run: |
           LATEST_FILE=$(ls -t data/raw/*.json | head -n 1)
