@@ -1,15 +1,16 @@
-import requests
 import json
 from datetime import datetime
 
-url = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
+import requests
 
-response = requests.get(url)
+URL = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
+
+response = requests.get(URL, timeout=60)
+response.raise_for_status()
 
 data = response.json()
 
 fecha_dataset = data["Fecha"]
-
 numero_estaciones = len(data["ListaEESSPrecio"])
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

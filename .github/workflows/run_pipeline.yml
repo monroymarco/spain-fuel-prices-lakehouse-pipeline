@@ -1,0 +1,58 @@
+name: Spain Fuel Prices Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      DATABRICKS_JOB_ID: ${{ secrets.DATABRICKS_JOB_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+      - name: Verify Databricks CLI
+        run: |
+          databricks version
+
+      - name: Download Fuel Prices
+        run: |
+          python scripts/download_fuel_prices.py
+
+      - name: Upload JSON to Databricks Volume
+        run: |
+          LATEST_FILE=$(ls -t data/raw/*.json | head -n 1)
+
+          echo "Uploading: $LATEST_FILE"
+
+          databricks fs cp \
+            "$LATEST_FILE" \
+            "dbfs:/Volumes/workspace/default/fuel_prices/raw/$(basename "$LATEST_FILE")" \
+            --overwrite
+
+      - name: Trigger Databricks Job
+        run: |
+          curl -X POST \
+            "$DATABRICKS_HOST/api/2.1/jobs/run-now" \
+            -H "Authorization: Bearer $DATABRICKS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"job_id\": $DATABRICKS_JOB_ID}"
