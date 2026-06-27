@@ -57,7 +57,11 @@ def main():
     metrics["cheapest_station"] = (
         f"{station[0]} - {station[1]}"
     )
-
+    from databricks_sql import get_table
+    
+    print(get_table("SELECT current_catalog(), current_schema()"))
+    
+    print(get_table("DESCRIBE TABLE silver_fuel_prices"))
     metrics["avg_diesel"] = get_single_value(AVG_DIESEL)
 
     metrics["avg_gas95"] = get_single_value(AVG_GASOLINE_95)

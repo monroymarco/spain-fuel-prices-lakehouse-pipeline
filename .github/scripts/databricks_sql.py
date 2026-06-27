@@ -32,6 +32,8 @@ def _submit_statement(statement: str) -> str:
         headers=HEADERS,
         json={
             "warehouse_id": WAREHOUSE,
+            "catalog": "workspace",
+            "schema": "default",
             "statement": statement
         },
         timeout=30
