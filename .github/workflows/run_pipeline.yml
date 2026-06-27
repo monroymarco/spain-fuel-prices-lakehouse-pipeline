@@ -51,3 +51,7 @@ jobs:
             -H "Authorization: Bearer $DATABRICKS_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"job_id\": $DATABRICKS_JOB_ID}"
+
+      - name: Generate Execution Summary
+        run: |
+          python3 .github/scripts/generate_summary.py
