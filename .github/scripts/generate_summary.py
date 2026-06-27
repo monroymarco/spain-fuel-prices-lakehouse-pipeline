@@ -1,80 +1,92 @@
 import os
-import time
-import json
-import requests
+from datetime import datetime
 
-HOST = os.environ["DATABRICKS_HOST"]
-TOKEN = os.environ["DATABRICKS_TOKEN"]
-WAREHOUSE = os.environ["DATABRICKS_WAREHOUSE_ID"]
+from databricks_sql import (
+    get_single_value,
+    get_single_row,
+    get_table
+)
 
-HEADERS = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Content-Type": "application/json"
-}
+from sql_queries import *
+
+from report_builder import build_report
 
 
-def execute_sql(statement):
+def main():
 
-    print("Sending SQL statement...")
+    metrics = {}
 
-    response = requests.post(
-        f"{HOST}/api/2.0/sql/statements/",
-        headers=HEADERS,
-        json={
-            "warehouse_id": WAREHOUSE,
-            "statement": statement
-        },
-        timeout=30
+    # ======================================================
+    # EXECUTION
+    # ======================================================
+
+    metrics["status"] = "SUCCESS"
+
+    metrics["run_id"] = os.environ.get("RUN_ID", "-")
+
+    metrics["execution_date"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+    metrics["duration"] = "Calculated by Databricks"
+
+    # ======================================================
+    # PIPELINE METRICS
+    # ======================================================
+
+    metrics["bronze"] = int(get_single_value(BRONZE_RECORDS))
+
+    metrics["silver"] = int(get_single_value(SILVER_RECORDS))
+
+    metrics["gold_tables"] = len(get_table(GOLD_TABLES))
+
+    metrics["stations"] = int(get_single_value(STATIONS_PROCESSED))
+
+    metrics["latest_dataset"] = get_single_value(LATEST_DATASET)
+
+    # ======================================================
+    # BUSINESS KPIs
+    # ======================================================
+
+    province = get_single_row(CHEAPEST_PROVINCE)
+
+    metrics["cheapest_province"] = (
+        f"{province[0]} ({province[1]} €/L)"
     )
 
-    print("POST:", response.status_code)
+    station = get_single_row(CHEAPEST_STATION)
 
-    response.raise_for_status()
+    metrics["cheapest_station"] = (
+        f"{station[0]} - {station[1]}"
+    )
 
-    data = response.json()
+    metrics["avg_diesel"] = get_single_value(AVG_DIESEL)
 
-    print(json.dumps(data, indent=2))
+    metrics["avg_gas95"] = get_single_value(AVG_GASOLINE_95)
 
-    statement_id = data["statement_id"]
+    metrics["avg_gas98"] = get_single_value(AVG_GASOLINE_98)
 
-    while True:
+    drop = get_single_row(BIGGEST_PRICE_DROP)
 
-        print("Checking status...")
+    metrics["biggest_drop"] = (
+        f"{drop[3]} ({drop[0]})"
+    )
 
-        status = requests.get(
-            f"{HOST}/api/2.0/sql/statements/{statement_id}",
-            headers=HEADERS,
-            timeout=30
-        )
+    # ======================================================
+    # FILE
+    # ======================================================
 
-        print("GET:", status.status_code)
+    metrics["processed_file"] = "Generated automatically"
 
-        status.raise_for_status()
+    # ======================================================
+    # BUILD REPORT
+    # ======================================================
 
-        result = status.json()
+    report = build_report(metrics)
 
-        print(json.dumps(result, indent=2))
+    with open(os.environ["GITHUB_STEP_SUMMARY"], "w") as f:
+        f.write(report)
 
-        state = result["status"]["state"]
-
-        print("STATE =", state)
-
-        if state == "SUCCEEDED":
-            return result
-
-        if state in ("FAILED", "CANCELED"):
-            raise Exception(json.dumps(result, indent=2))
-
-        time.sleep(2)
+    print("Execution Summary generated successfully.")
 
 
-# --------------------------
-# Test query
-# --------------------------
-
-result = execute_sql("""
-SELECT COUNT(*) AS total
-FROM bronze_fuel_prices
-""")
-
-print(json.dumps(result, indent=2))
+if __name__ == "__main__":
+    main()
