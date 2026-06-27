@@ -46,12 +46,51 @@ jobs:
 
       - name: Trigger Databricks Job
         run: |
-          curl -X POST \
+          RESPONSE=$(curl -s -X POST \
             "$DATABRICKS_HOST/api/2.1/jobs/run-now" \
             -H "Authorization: Bearer $DATABRICKS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"job_id\": $DATABRICKS_JOB_ID}"
+            -d "{\"job_id\": $DATABRICKS_JOB_ID}")
+
+          echo "$RESPONSE"
+
+          RUN_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['run_id'])")
+
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+
+      - name: Wait for Databricks Job
+        run: |
+          echo "Waiting for Databricks Job..."
+
+          while true
+          do
+            STATUS=$(curl -s \
+              "$DATABRICKS_HOST/api/2.1/jobs/runs/get?run_id=$RUN_ID" \
+              -H "Authorization: Bearer $DATABRICKS_TOKEN")
+
+            LIFE=$(echo "$STATUS" | python3 -c "import sys,json; print(json.load(sys.stdin)['state']['life_cycle_state'])")
+
+            RESULT=$(echo "$STATUS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['state'].get('result_state',''))")
+
+            echo "Status: $LIFE - $RESULT"
+
+            if [ "$LIFE" = "TERMINATED" ]; then
+              if [ "$RESULT" != "SUCCESS" ]; then
+                echo "Databricks Job failed."
+                exit 1
+              fi
+              echo "Databricks Job completed successfully."
+              break
+            fi
+
+            if [ "$LIFE" = "INTERNAL_ERROR" ] || [ "$LIFE" = "SKIPPED" ]; then
+              echo "Databricks Job ended unexpectedly."
+              exit 1
+            fi
+
+            sleep 10
+          done
 
       - name: Generate Execution Summary
         run: |
-          python3 scripts/.github/generate_summary.py
+          python3 .github/scripts/generate_summary.py
