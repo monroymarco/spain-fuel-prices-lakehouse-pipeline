@@ -13,7 +13,11 @@ FROM silver_fuel_prices
 """
 
 GOLD_TABLES = """
-SHOW TABLES LIKE 'gold_%'
+SELECT COUNT(*) AS total
+FROM information_schema.tables
+WHERE table_schema='default'
+AND table_name LIKE 'gold_%'
+
 """
 
 STATIONS_PROCESSED = """

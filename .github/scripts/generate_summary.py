@@ -36,7 +36,7 @@ def main():
 
     metrics["silver"] = int(get_single_value(SILVER_RECORDS))
 
-    metrics["gold_tables"] = len(get_table(GOLD_TABLES))
+    metrics["gold_tables"] = int(get_single_value(GOLD_TABLES))
 
     metrics["stations"] = int(get_single_value(STATIONS_PROCESSED))
 
