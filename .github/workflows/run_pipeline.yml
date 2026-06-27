@@ -67,8 +67,6 @@ jobs:
             STATUS=$(curl -s \
               "$DATABRICKS_HOST/api/2.1/jobs/runs/get?run_id=$RUN_ID" \
               -H "Authorization: Bearer $DATABRICKS_TOKEN")
-            echo "API Response:"
-            echo "$STATUS"
 
             LIFE=$(echo "$STATUS" | python3 -c "import sys,json; print(json.load(sys.stdin)['state']['life_cycle_state'])")
 
@@ -94,5 +92,9 @@ jobs:
           done
 
       - name: Generate Execution Summary
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          RUN_ID: ${{ env.RUN_ID }}
         run: |
           python3 .github/scripts/generate_summary.py
