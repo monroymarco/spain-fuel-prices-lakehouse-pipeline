@@ -54,4 +54,4 @@ jobs:
 
       - name: Generate Execution Summary
         run: |
-          python3 .github/scripts/generate_summary.py
+          python3 scripts/.github/generate_summary.py
