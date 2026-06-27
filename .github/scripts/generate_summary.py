@@ -1,98 +1,26 @@
-from pathlib import Path
-from datetime import datetime
 import os
 import requests
-
-# ==========================
-# Environment variables
-# ==========================
+import json
 
 HOST = os.environ["DATABRICKS_HOST"]
 TOKEN = os.environ["DATABRICKS_TOKEN"]
-RUN_ID = os.environ["RUN_ID"]
+WAREHOUSE = os.environ["DATABRICKS_WAREHOUSE_ID"]
 
-# ==========================
-# Databricks Job information
-# ==========================
-
-response = requests.get(
-    f"{HOST}/api/2.1/jobs/runs/get",
-    headers={"Authorization": f"Bearer {TOKEN}"},
-    params={"run_id": RUN_ID},
+response = requests.post(
+    f"{HOST}/api/2.0/sql/statements/",
+    headers={
+        "Authorization": f"Bearer {TOKEN}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "warehouse_id": WAREHOUSE,
+        "statement": "SELECT COUNT(*) AS total FROM bronze_fuel_prices"
+    }
 )
 
-job = response.json()
-
-state = job["state"]["result_state"]
-life_cycle = job["state"]["life_cycle_state"]
-
-start_time = job["start_time"]
-end_time = job["end_time"]
-
-duration_seconds = int((end_time - start_time) / 1000)
-
-minutes = duration_seconds // 60
-seconds = duration_seconds % 60
-
-execution_time = datetime.fromtimestamp(
-    end_time / 1000
-).strftime("%d/%m/%Y %H:%M:%S")
-
-# ==========================
-# Latest processed JSON
-# ==========================
-
-raw_path = Path("data/raw")
-
-json_files = sorted(raw_path.glob("*.json"))
-
-latest_file = (
-    json_files[-1].name
-    if json_files
-    else "No file found"
-)
-
-# ==========================
-# Summary
-# ==========================
-
-summary = f"""
-# ⛽ Spain Fuel Prices Pipeline
-
-## ✅ Execution Status
-**{state}**
-
-## 🆔 Run ID
-{RUN_ID}
-
-## ⏱ Duration
-{minutes} min {seconds} sec
-
-## 📅 Execution Date
-{execution_time}
-
-## 📦 Processed File
-{latest_file}
-
-## ⚙️ Databricks Job
-
-- Life Cycle: **{life_cycle}**
-- Result: **{state}**
-
-## 🔄 Pipeline
-
-- ✅ Download Fuel Prices
-- ✅ Upload to Databricks Volume
-- ✅ Bronze
-- ✅ Silver
-- ✅ Gold
-
-## 🚀 Trigger
-
-GitHub Actions → Databricks Workflow
-"""
+print(response.status_code)
+print(json.dumps(response.json(), indent=2))
 
 with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
-    f.write(summary)
-
-print("Execution Summary created.")
+    f.write("# SQL Warehouse Test\n")
+    f.write("Consulta enviada correctamente.\n")
