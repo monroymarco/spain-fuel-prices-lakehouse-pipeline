@@ -396,9 +396,12 @@ This layer transforms the curated Silver data into meaningful business KPIs usin
 ### Main Gold Tables
 
 - `gold_fuel_avg_price_by_province`
+- `gold_fuel_avg_price_national`
+- `gold_fuel_cheapest_station_by_province`
 - `gold_fuel_cheapest_ranking_nacional_top_10`
 - `gold_fuel_expensive_ranking_nacional_top_10`
 - `gold_fuel_price_change_vs_previous_snapshot`
+- `gold_fuel_price_vs_provincial_average`
 - `gold_fuel_top_price_decreases`
 - `gold_fuel_top_price_increases`
 
@@ -427,21 +430,13 @@ The automation process executes the complete end-to-end pipeline with a single c
 flowchart LR
 
 A[GitHub Actions]
-
 B[Self-hosted Runner]
-
 C[Download Fuel Prices]
-
-D[Upload JSON]
-
+D[Upload JSON to Databricks Volume]
 E[Databricks Workflow]
-
 F[Bronze]
-
 G[Silver]
-
 H[Gold]
-
 I[Execution Summary]
 
 A --> B
@@ -453,6 +448,22 @@ F --> G
 G --> H
 H --> I
 ```
+
+The extraction process is automatically triggered using GitHub Actions.
+
+### GitHub Actions Workflow
+
+![GitHub Actions Workflow](assets/github_actions.png)
+
+### Successful GitHub Actions Execution
+
+![GitHub Actions Success](assets/github_actions_workflow.png)
+
+The pipeline is orchestrated using Databricks Workflows, executing the Bronze, Silver and Gold notebooks sequentially.
+
+### Databricks Workflow
+
+![Databricks Workflow](assets/databricks_workflow.png)
 
 ### Automation Components
 
@@ -477,6 +488,8 @@ H --> I
 
 # 12. Dashboard
 
+# 12. Dashboard
+
 The project includes an interactive Databricks SQL Dashboard built on the Gold layer tables.
 
 The dashboard provides a business-oriented view of fuel prices across Spain, allowing users to monitor pricing trends, compare provinces and identify the most competitive fuel stations.
@@ -496,13 +509,19 @@ The dashboard provides a business-oriented view of fuel prices across Spain, all
 
 The dashboard transforms raw fuel price data into actionable business insights, enabling users to identify pricing patterns, compare regional markets and support data-driven decision making.
 
-> **Dashboard screenshots will be included below.**
+## Executive Dashboard
 
-<!-- Dashboard Screenshot 1 -->
+![Executive Dashboard](assets/dashboard_overview.png)
 
-<!-- Dashboard Screenshot 2 -->
+## National Fuel Rankings
 
-<!-- Dashboard Screenshot 3 -->
+![National Fuel Rankings](assets/dashboard_ranking.png)
+
+## Provincial Analysis
+
+![Provincial Analysis](assets/dashboard_province.png)
+
+---
 
 ---
 
@@ -543,7 +562,7 @@ Before running the project, make sure the following requirements are met:
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/spain-fuel-prices-lakehouse-pipeline.git
+git clone https://github.com/monroymarco/spain-fuel-prices-lakehouse-pipeline.git
 
 cd spain-fuel-prices-lakehouse-pipeline
 ```
@@ -563,21 +582,43 @@ Configure the following repository secrets:
 - DATABRICKS_JOB_ID
 - DATABRICKS_WAREHOUSE_ID
 
-### Execute the Pipeline
+## Start the Self-hosted Runner
 
-The complete pipeline can be executed directly from GitHub Actions.
+Before executing the pipeline, make sure the self-hosted GitHub Actions Runner is running and connected to the repository.
 
-The workflow automatically performs the following steps:
+## Run the Pipeline
 
-1. Download the latest fuel prices dataset.
-2. Upload the JSON file to Databricks Volumes.
-3. Execute the Databricks Workflow.
-4. Run the Bronze notebook.
-5. Run the Silver notebook.
-6. Run the Gold notebook.
-7. Generate the execution summary.
+The pipeline can be triggered manually from the **GitHub Actions** tab.
 
-After the workflow finishes successfully, the Gold tables are ready to be queried from Databricks SQL and visualized in the dashboard.
+The workflow performs the following steps automatically:
+
+1. Download the latest fuel prices dataset from the Official Spain Fuel Prices REST API.
+
+2. Store the JSON file locally.
+
+3. Upload the dataset to Databricks Volumes.
+
+4. Trigger the Databricks Workflow.
+
+5. Execute the Bronze notebook.
+
+6. Execute the Silver notebook.
+
+7. Execute the Gold notebook.
+
+8. Generate the GitHub Actions execution summary.
+
+## Verify the Results
+
+After a successful execution:
+
+- The Bronze, Silver and Gold Delta tables are updated.
+
+- The Databricks SQL Dashboard reflects the latest processed snapshot.
+
+- Historical fuel price data is preserved for trend analysis.
+
+- The workflow execution can be verified in both GitHub Actions and Databricks Workflows.
 
 ---
 
@@ -589,7 +630,7 @@ The project successfully implements a fully automated Lakehouse pipeline for fue
 
 - Automated end-to-end ETL pipeline.
 - Integration with the Official Spain Fuel Prices REST API.
-- Processing of more than **11,000 fuel stations**.
+- Processing data from more than **11,000 fuel stations per execution**.
 - Bronze, Silver and Gold Medallion Architecture.
 - Automated execution using GitHub Actions.
 - Orchestration with Databricks Workflows.
@@ -606,7 +647,7 @@ The project successfully implements a fully automated Lakehouse pipeline for fue
 - Delta Lake Implementation
 - Data Modeling
 - Window Functions
-- SQL Analytics
+- Spark SQL Analytics
 - GitHub Actions Automation
 - Self-hosted GitHub Runner
 - Databricks Workflow Orchestration
@@ -617,47 +658,56 @@ The project demonstrates the complete lifecycle of a modern Data Engineering sol
 
 # 16. Future Improvements
 
-Possible future enhancements include:
+Several enhancements can be implemented to further improve the pipeline:
 
-- Automatic scheduled pipeline execution.
-- Additional data quality validation rules.
-- Support for more fuel types.
-- Advanced historical trend analysis.
-- Fuel price forecasting using Machine Learning.
-- CI/CD deployment improvements.
-- Automated testing for ETL processes.
-- Monitoring and alerting.
-- Data quality dashboards.
-- Unity Catalog integration.
+- Schedule automatic executions using Databricks Jobs or GitHub Actions.
+- Implement data quality checks with validation rules.
+- Add monitoring and alerting for pipeline failures.
+- Integrate Unity Catalog for centralized governance.
+- Support additional fuel types.
+- Build forecasting models for fuel price prediction.
+- Expose analytical datasets through REST APIs.
+- Containerize the pipeline using Docker.
+- Implement CI/CD deployment strategies.
+- Optimize Spark transformations for larger datasets.
+- Deploy the solution on Azure Databricks.
+
+These improvements would increase scalability, maintainability and production readiness while following modern Data Engineering best practices.
 
 ---
 
 # 17. Lessons Learned
 
-This project provided hands-on experience with modern Data Engineering technologies and best practices.
+Building this project provided practical experience with modern Data Engineering technologies, cloud-based data platforms and automated data pipelines.
 
-### Technical Skills
+### Technical Skills Acquired
 
 - REST API integration.
 - Python automation.
 - PySpark transformations.
+- Spark SQL.
 - Delta Lake.
 - Medallion Architecture.
 - Databricks Workflows.
 - GitHub Actions.
 - Self-hosted GitHub Runner.
-- SQL analytics.
+- Data Modeling.
 - Window Functions.
-- Data modeling.
-- Lakehouse architecture.
+- Historical Data Processing.
+- SQL Dashboard development.
+- End-to-End ETL Pipeline Design.
+- Git version control.
 
-### Key Takeaways
+### Key Learnings
 
-- Designing scalable ETL pipelines.
-- Building reliable data ingestion processes.
-- Structuring data using Medallion Architecture.
-- Automating end-to-end workflows.
-- Creating business-ready analytical datasets.
+- Designing scalable Lakehouse architectures.
+- Building automated data ingestion pipelines.
+- Transforming raw data into business-ready datasets.
+- Managing historical data efficiently.
+- Validating analytical results against official data sources.
 - Applying software engineering best practices to Data Engineering projects.
+- Developing production-style workflows using Databricks and GitHub.
 
-This project represents a complete end-to-end Data Engineering solution that combines data ingestion, transformation, orchestration, automation and analytical reporting using modern cloud technologies.
+This project represents a complete end-to-end Data Engineering solution that combines automation, distributed data processing, historical data management and business analytics using modern cloud technologies.
+
+---
