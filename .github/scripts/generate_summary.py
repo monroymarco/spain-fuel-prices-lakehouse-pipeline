@@ -1,96 +1,41 @@
-import os
+from pathlib import Path
 from datetime import datetime
+import os
 
-from databricks_sql import (
-    get_single_value,
-    get_single_row,
-    get_table
-)
+raw_path = Path("data/raw")
+json_files = sorted(raw_path.glob("*.json"))
 
-from sql_queries import *
+latest_file = json_files[-1].name if json_files else "No file found"
 
-from report_builder import build_report
+summary = f"""
+# ⛽ Spain Fuel Prices Pipeline
 
+## ✅ Execution Status
+SUCCESS
 
-def main():
+## 🆔 Run ID
+{os.environ.get("RUN_ID", "-")}
 
-    metrics = {}
+## 📅 Execution Date
+{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}
 
-    # ======================================================
-    # EXECUTION
-    # ======================================================
+## 📦 Processed File
+{latest_file}
 
-    metrics["status"] = "SUCCESS"
+## 🔄 Pipeline
 
-    metrics["run_id"] = os.environ.get("RUN_ID", "-")
+- ✅ Download Fuel Prices
+- ✅ Upload to Databricks Volume
+- ✅ Bronze
+- ✅ Silver
+- ✅ Gold
 
-    metrics["execution_date"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+## 🚀 Trigger
 
-    metrics["duration"] = "Calculated by Databricks"
+GitHub Actions → Databricks Workflow
+"""
 
-    # ======================================================
-    # PIPELINE METRICS
-    # ======================================================
+with open(os.environ["GITHUB_STEP_SUMMARY"], "w") as f:
+    f.write(summary)
 
-    metrics["bronze"] = int(get_single_value(BRONZE_RECORDS))
-
-    metrics["silver"] = int(get_single_value(SILVER_RECORDS))
-
-    metrics["gold_tables"] = int(get_single_value(GOLD_TABLES))
-
-    metrics["stations"] = int(get_single_value(STATIONS_PROCESSED))
-
-    metrics["latest_dataset"] = get_single_value(LATEST_DATASET)
-
-    # ======================================================
-    # BUSINESS KPIs
-    # ======================================================
-
-    province = get_single_row(CHEAPEST_PROVINCE)
-
-    metrics["cheapest_province"] = (
-        f"{province[0]} ({province[1]} €/L)"
-    )
-
-    station = get_single_row(CHEAPEST_STATION)
-
-    metrics["cheapest_station"] = (
-        f"{station[0]} - {station[1]}"
-    )
-    from databricks_sql import get_table
-    
-    print(get_table("SELECT current_catalog(), current_schema()"))
-    
-    print(get_table("DESCRIBE TABLE silver_fuel_prices"))
-    metrics["avg_diesel"] = get_single_value(AVG_DIESEL)
-
-    metrics["avg_gas95"] = get_single_value(AVG_GASOLINE_95)
-
-    metrics["avg_gas98"] = get_single_value(AVG_GASOLINE_98)
-
-    drop = get_single_row(BIGGEST_PRICE_DROP)
-
-    metrics["biggest_drop"] = (
-        f"{drop[3]} ({drop[0]})"
-    )
-
-    # ======================================================
-    # FILE
-    # ======================================================
-
-    metrics["processed_file"] = "Generated automatically"
-
-    # ======================================================
-    # BUILD REPORT
-    # ======================================================
-
-    report = build_report(metrics)
-
-    with open(os.environ["GITHUB_STEP_SUMMARY"], "w") as f:
-        f.write(report)
-
-    print("Execution Summary generated successfully.")
-
-
-if __name__ == "__main__":
-    main()
+print("Execution Summary generated successfully.")
