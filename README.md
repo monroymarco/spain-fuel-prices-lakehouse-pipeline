@@ -1,3 +1,5 @@
+🇬🇧 **English** | 🇪🇸 [Versión en Español](README_ES.md)
+
 <p align="center">
   <img src="assets/fuel_banner.png" alt="Spain Fuel Prices Lakehouse Pipeline">
 </p>
@@ -79,8 +81,6 @@ flowchart TD
 ---
 
 # 3. Technologies
-
-## 3. Technologies
 
 | Technology           | Purpose                                                                              |
 | -------------------- | ------------------------------------------------------------------------------------ |
@@ -269,8 +269,6 @@ The Medallion Architecture enables the pipeline to transform raw fuel price data
 
 # 8. Bronze Layer
 
-## 8. Bronze Layer
-
 The Bronze layer is responsible for ingesting the raw dataset into the Lakehouse without applying business transformations.
 
 ### Objectives
@@ -424,32 +422,9 @@ The entire pipeline is fully automated using GitHub Actions, a self-hosted GitHu
 
 The automation process executes the complete end-to-end pipeline with a single click, from downloading the latest dataset to generating analytical tables in the Gold layer.
 
-### Automation Workflow
+### Automation Flow
 
-```mermaid
-flowchart LR
-
-A[GitHub Actions]
-B[Self-hosted Runner]
-C[Download Fuel Prices]
-D[Upload JSON to Databricks Volume]
-E[Databricks Workflow]
-F[Bronze]
-G[Silver]
-H[Gold]
-I[Execution Summary]
-
-A --> B
-B --> C
-C --> D
-D --> E
-E --> F
-F --> G
-G --> H
-H --> I
-```
-
-The extraction process is automatically triggered using GitHub Actions.
+GitHub Actions → Self-hosted Runner → Download Fuel Prices → Upload JSON → Databricks Workflow → Bronze → Silver → Gold → Execution Summary
 
 ### GitHub Actions Workflow
 
@@ -459,34 +434,11 @@ The extraction process is automatically triggered using GitHub Actions.
 
 ![GitHub Actions Success](assets/github_actions_workflow.png)
 
-The pipeline is orchestrated using Databricks Workflows, executing the Bronze, Silver and Gold notebooks sequentially.
-
 ### Databricks Workflow
 
 ![Databricks Workflow](assets/databricks_workflow.png)
 
-### Automation Components
-
-| Component            | Purpose                                                   |
-| -------------------- | --------------------------------------------------------- |
-| GitHub Actions       | Automates the complete pipeline execution.                |
-| Self-hosted Runner   | Executes the workflow on a dedicated machine.             |
-| Python Scripts       | Download the dataset and upload it to Databricks Volumes. |
-| Databricks Workflows | Orchestrates the Bronze, Silver and Gold notebooks.       |
-| GitHub Summary       | Displays the execution status after each workflow run.    |
-
-### Benefits
-
-- Fully automated execution.
-- One-click pipeline deployment.
-- Reproducible ETL process.
-- Automated orchestration.
-- Reduced manual intervention.
-- Easy monitoring through GitHub Actions.
-
 ---
-
-# 12. Dashboard
 
 # 12. Dashboard
 
@@ -678,7 +630,7 @@ These improvements would increase scalability, maintainability and production re
 
 # 17. Lessons Learned
 
-Building this project provided practical experience with modern Data Engineering technologies, cloud-based data platforms and automated data pipelines.
+Building this project provided hands-on experience with modern Data Engineering technologies, cloud-based data platforms and end-to-end automated data pipelines.
 
 ### Technical Skills Acquired
 
@@ -708,6 +660,6 @@ Building this project provided practical experience with modern Data Engineering
 - Applying software engineering best practices to Data Engineering projects.
 - Developing production-style workflows using Databricks and GitHub.
 
-This project represents a complete end-to-end Data Engineering solution that combines automation, distributed data processing, historical data management and business analytics using modern cloud technologies.
+This project demonstrates the complete lifecycle of a modern Data Engineering solution, combining automated data ingestion, distributed processing with PySpark, Delta Lake, workflow orchestration and business-ready analytics using Databricks.
 
 ---
