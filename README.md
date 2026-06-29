@@ -2,6 +2,15 @@
   <img src="assets/fuel_banner.png" alt="Spain Fuel Prices Lakehouse Pipeline">
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/PySpark-3.x-E25A1C?logo=apachespark&logoColor=white" />
+  <img src="https://img.shields.io/badge/Databricks-Lakehouse-FF3621?logo=databricks&logoColor=white" />
+  <img src="https://img.shields.io/badge/Delta-Lake-00ADD8" />
+  <img src="https://img.shields.io/badge/GitHub-Actions-2088FF?logo=githubactions&logoColor=white" />
+  <img src="https://img.shields.io/badge/SQL-Databricks-4479A1?logo=databricks&logoColor=white" />
+</p>
+
 # ⛽ Spain Fuel Prices Automated Lakehouse Pipeline
 
 > Automated Lakehouse Pipeline for fuel prices in Spain using GitHub Actions, Databricks Workflows, PySpark and Medallion Architecture.
