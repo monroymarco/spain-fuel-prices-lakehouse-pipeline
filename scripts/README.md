@@ -133,3 +133,23 @@ This project demonstrates practical skills in Data Engineering, including ETL de
 # 17. Lessons Learned
 
 > _(Coming in the next section.)_
+
+```mermaid
+flowchart TD
+    A[Spanish Ministry REST API]
+    B[GitHub Actions]
+    C[Download JSON]
+    D[Databricks Volume]
+    E[Bronze]
+    F[Silver]
+    G[Gold]
+    H[Dashboard]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+```
