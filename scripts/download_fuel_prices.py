@@ -31,8 +31,10 @@ for attempt in range(5):
 
         print("Retrying in 10 seconds...")
         time.sleep(10)
-
-data = response.json()
+        
+if response is None:
+    raise RuntimeError("No response received from the API.")
+data = response.json() 
 
 fecha_dataset = data["Fecha"]
 numero_estaciones = len(data["ListaEESSPrecio"])
