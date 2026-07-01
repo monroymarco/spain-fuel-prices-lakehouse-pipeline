@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/fuel_banner.png" alt="Spain Fuel Prices Lakehouse Pipeline">
+  <img src="assets/fuel_banner_es.png" alt="Spain Fuel Prices Lakehouse Pipeline">
 </p>
 
 <p align="center">
