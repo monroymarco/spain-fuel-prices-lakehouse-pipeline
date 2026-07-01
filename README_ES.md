@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/SQL-Databricks-4479A1?logo=databricks&logoColor=white" />
 </p>
 
-# ⛽ Spain Fuel Prices Automated Lakehouse Pipeline
+# ⛽ Pipeline Lakehouse Automatizado de Precios de Combustibles en España
 
 > Pipeline Lakehouse automatizado para el análisis de precios de combustibles en España utilizando GitHub Actions, Databricks Workflows, PySpark y la Arquitectura Medallion.
 
