@@ -496,6 +496,12 @@ The Executive Dashboard provides a high-level overview of fuel prices across Spa
 This dashboard displays the national ranking of fuel stations by fuel type, helping identify the cheapest stations across Spain and compare prices between operators.
 
 <p align="center">
+  <img src="assets/ranking_nacional.png" width="100%">
+</p>
+
+---
+
+<p align="center">
   <img src="assets/ranking_nacional_2.png" width="100%">
 </p>
 

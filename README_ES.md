@@ -488,6 +488,12 @@ El Resumen Ejecutivo ofrece una visión general de los precios de los combustibl
 Este panel muestra el ranking nacional de estaciones de servicio por tipo de combustible, permitiendo identificar las estaciones más económicas de España y comparar precios entre diferentes operadores.
 
 <p align="center">
+  <img src="assets/ranking_nacional.png" width="100%">
+</p>
+
+---
+
+<p align="center">
   <img src="assets/ranking_nacional_2.png" width="100%">
 </p>
 
