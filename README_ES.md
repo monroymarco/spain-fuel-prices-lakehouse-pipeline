@@ -418,17 +418,37 @@ El proceso de automatización ejecuta el pipeline completo de extremo a extremo 
 
 GitHub Actions → Self-hosted Runner → Descarga de Precios de Combustibles → Carga del JSON → Databricks Workflow → Bronze → Silver → Gold → Resumen de Ejecución
 
-### Workflow de GitHub Actions
+---
+
+## Workflow de GitHub Actions
+
+GitHub Actions inicia automáticamente el proceso de extracción de datos, ejecuta los scripts de automatización y desencadena el Workflow de Databricks.
 
 ![GitHub Actions Workflow](assets/github_actions.png)
 
-### Ejecución Correcta de GitHub Actions
+---
+
+## Ejecución Correcta de GitHub Actions
+
+Una vez finalizada la ejecución, GitHub Actions genera un resumen con el estado del pipeline, el archivo procesado y el identificador de la ejecución.
 
 ![GitHub Actions Success](assets/github_actions_workflow.png)
 
-### Databricks Workflow
+---
 
-![Databricks Workflow](assets/databricks_workflow.png)
+## Workflow de Databricks en Ejecución
+
+Después de recibir la solicitud desde GitHub Actions, Databricks ejecuta de forma secuencial los notebooks de las capas Bronze, Silver y Gold. Durante este proceso es posible monitorear el progreso de cada tarea en tiempo real.
+
+![Databricks Workflow Running](assets/databricks_workflow_running.png)
+
+---
+
+## Workflow de Databricks Finalizado
+
+Al finalizar la ejecución, Databricks confirma que las tres capas de la arquitectura Medallion fueron procesadas correctamente utilizando Serverless Compute. Esta vista permite verificar la duración de la ejecución, el estado del Workflow y la correcta orquestación de todo el pipeline.
+
+![Databricks Workflow Success](assets/databricks_workflow.png)
 
 ---
 

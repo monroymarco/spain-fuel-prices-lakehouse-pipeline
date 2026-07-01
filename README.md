@@ -418,7 +418,7 @@ The Gold layer provides optimized analytical datasets that allow users to identi
 
 # 11. Automation
 
-The entire pipeline is fully automated using GitHub Actions, a self-hosted GitHub Actions Runner and Databricks Workflows.
+The entire pipeline is fully automated using GitHub Actions, a Self-hosted GitHub Actions Runner and Databricks Workflows.
 
 The automation process executes the complete end-to-end pipeline with a single click, from downloading the latest dataset to generating analytical tables in the Gold layer.
 
@@ -426,17 +426,37 @@ The automation process executes the complete end-to-end pipeline with a single c
 
 GitHub Actions → Self-hosted Runner → Download Fuel Prices → Upload JSON → Databricks Workflow → Bronze → Silver → Gold → Execution Summary
 
-### GitHub Actions Workflow
+---
+
+## GitHub Actions Workflow
+
+GitHub Actions automatically starts the extraction process, executes the automation scripts and triggers the Databricks Workflow.
 
 ![GitHub Actions Workflow](assets/github_actions.png)
 
-### Successful GitHub Actions Execution
+---
+
+## Successful GitHub Actions Execution
+
+Once the workflow finishes, GitHub Actions generates an execution summary including the pipeline status, processed file and execution identifier.
 
 ![GitHub Actions Success](assets/github_actions_workflow.png)
 
-### Databricks Workflow
+---
 
-![Databricks Workflow](assets/databricks_workflow.png)
+## Databricks Workflow Running
+
+After receiving the request from GitHub Actions, Databricks executes the Bronze, Silver and Gold notebooks sequentially. During execution, the progress of each task can be monitored in real time.
+
+![Databricks Workflow Running](assets/databricks_workflow_running.png)
+
+---
+
+## Successful Databricks Workflow Execution
+
+After the execution is completed, Databricks confirms that all three Medallion Architecture layers have been processed successfully using Serverless Compute. This view provides detailed information about the workflow status, execution time and the successful orchestration of the entire pipeline.
+
+![Databricks Workflow Success](assets/databricks_workflow.png)
 
 ---
 
