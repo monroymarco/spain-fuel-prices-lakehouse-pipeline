@@ -463,17 +463,31 @@ The dashboard transforms raw fuel price data into actionable business insights, 
 
 ## Executive Dashboard
 
-![Executive Dashboard](assets/dashboard_overview.png)
+The Executive Dashboard provides a high-level overview of fuel prices across Spain, including key business metrics and interactive visualizations built on the Gold layer.
 
-## National Fuel Rankings
-
-![National Fuel Rankings](assets/dashboard_ranking.png)
-
-## Provincial Analysis
-
-![Provincial Analysis](assets/dashboard_province.png)
+<p align="center">
+  <img src="assets/resumen_ejecutivo.png" width="100%">
+</p>
 
 ---
+
+## National Fuel Price Rankings
+
+This dashboard displays the national ranking of fuel stations by fuel type, helping identify the cheapest stations across Spain and compare prices between operators.
+
+<p align="center">
+  <img src="assets/ranking_nacional_2.png" width="100%">
+</p>
+
+---
+
+## Provincial Price Spread Analysis
+
+This visualization highlights the provinces with the largest price differences between the cheapest and the most expensive fuel stations for each fuel type, providing insights into regional market competitiveness.
+
+<p align="center">
+  <img src="assets/ranking_nacional_3.png" width="100%">
+</p>
 
 ---
 

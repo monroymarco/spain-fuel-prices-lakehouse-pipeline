@@ -455,15 +455,31 @@ El dashboard transforma datos brutos de precios de combustibles en información 
 
 ## Dashboard Ejecutivo
 
-![Executive Dashboard](assets/dashboard_overview.png)
+El Resumen Ejecutivo ofrece una visión general de los precios de los combustibles en España mediante indicadores clave de negocio y visualizaciones interactivas construidas sobre la capa Gold.
+
+<p align="center">
+  <img src="assets/resumen_ejecutivo.png" width="100%">
+</p>
+
+---
 
 ## Rankings Nacionales de Combustibles
 
-![National Fuel Rankings](assets/dashboard_ranking.png)
+Este panel muestra el ranking nacional de estaciones de servicio por tipo de combustible, permitiendo identificar las estaciones más económicas de España y comparar precios entre diferentes operadores.
 
-## Análisis Provincial
+<p align="center">
+  <img src="assets/ranking_nacional_2.png" width="100%">
+</p>
 
-![Provincial Analysis](assets/dashboard_province.png)
+---
+
+## Análisis de Dispersión de Precios por Provincia
+
+Esta visualización muestra las provincias con la mayor diferencia de precios entre la estación de servicio más barata y la más cara para cada tipo de combustible, proporcionando información sobre la competitividad del mercado en cada región.
+
+<p align="center">
+  <img src="assets/ranking_nacional_3.png" width="100%">
+</p>
 
 ---
 
