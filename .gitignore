@@ -5,8 +5,14 @@
 __pycache__/
 *.py[cod]
 
+# Ruff
+.ruff_cache/
+
 # macOS
 .DS_Store
 
-# Ruff
-.ruff_cache/
+# VS Code
+.vscode/
+
+# JetBrains IDEs
+.idea/

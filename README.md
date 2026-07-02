@@ -119,9 +119,25 @@ spain-fuel-prices-lakehouse-pipeline/
 
 │
 
+├── assets/
+
+│   ├── fuel_banner.png
+
+│   ├── github_actions.png
+
+│   ├── databricks_workflow.png
+
+│   ├── resumen_ejecutivo.png
+
+│   └── ...
+
+│
+
 ├── data/
 
 │   └── raw/
+
+│       └── fuel_prices_YYYYMMDD_HHMMSS.json
 
 │
 
@@ -137,17 +153,17 @@ spain-fuel-prices-lakehouse-pipeline/
 
 ├── scripts/
 
-│   ├── download_fuel_prices.py
-
-│   └── upload_to_databricks.py
+│   └── download_fuel_prices.py
 
 │
 
-├── requirements.txt
-
 ├── .gitignore
 
-└── README.md
+├── README.md
+
+├── README_ES.md
+
+└── requirements.txt
 
 ```
 
@@ -399,7 +415,6 @@ This layer transforms the curated Silver data into meaningful business KPIs usin
 - `gold_fuel_cheapest_ranking_nacional_top_10`
 - `gold_fuel_expensive_ranking_nacional_top_10`
 - `gold_fuel_price_change_vs_previous_snapshot`
-- `gold_fuel_price_vs_provincial_average`
 - `gold_fuel_top_price_decreases`
 - `gold_fuel_top_price_increases`
 

@@ -104,6 +104,7 @@ flowchart TD
 # 4. Estructura del Proyecto
 
 ```text
+
 spain-fuel-prices-lakehouse-pipeline/
 
 │
@@ -120,9 +121,25 @@ spain-fuel-prices-lakehouse-pipeline/
 
 │
 
+├── assets/
+
+│   ├── fuel_banner.png
+
+│   ├── github_actions.png
+
+│   ├── databricks_workflow.png
+
+│   ├── resumen_ejecutivo.png
+
+│   └── ...
+
+│
+
 ├── data/
 
 │   └── raw/
+
+│       └── fuel_prices_YYYYMMDD_HHMMSS.json
 
 │
 
@@ -138,17 +155,18 @@ spain-fuel-prices-lakehouse-pipeline/
 
 ├── scripts/
 
-│   ├── download_fuel_prices.py
-
-│   └── upload_to_databricks.py
+│   └── download_fuel_prices.py
 
 │
 
-├── requirements.txt
-
 ├── .gitignore
 
-└── README.md
+├── README.md
+
+├── README_ES.md
+
+└── requirements.txt
+
 ```
 
 ### Descripción de Directorios
@@ -379,7 +397,6 @@ Esta capa transforma los datos depurados de la capa Silver en KPIs de negocio me
 - Generar rankings provinciales de precios.
 - Identificar las estaciones de servicio más económicas.
 - Identificar las estaciones de servicio más caras.
-- Comparar los precios de las estaciones con la media provincial.
 - Calcular variaciones históricas de precios entre snapshots.
 - Crear conjuntos de datos optimizados para dashboards de Databricks SQL.
 
